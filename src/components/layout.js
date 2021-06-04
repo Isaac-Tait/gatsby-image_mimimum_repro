@@ -1,7 +1,8 @@
-import * as React from "react"
+import React from "react"
 import { Link, useStaticQuery, graphql } from "gatsby"
 
-import { GatsbyImage } from "gatsby-plugin-image";
+import { GatsbyImage, getImage, withArtDirection } from "gatsby-plugin-image";
+
 
 const Layout = ({ location, children }) => {
   const rootPath = `${__PATH_PREFIX__}/`
@@ -12,17 +13,16 @@ const Layout = ({ location, children }) => {
     childImageSharp {
       gatsbyImageData(
         width: 500
-        quality: 50
+        quality: 100
         placeholder: TRACED_SVG
         formats: [AUTO, WEBP, AVIF]
-        layout: CONSTRAINED
+        layout: FULL_WIDTH
       )
     }
   }
   mobileLogo: file(absolutePath: {regex: "/FfT_Logo_Mobile.png/"}) {
     childImageSharp {
       gatsbyImageData(
-        width: 250
         quality: 100
         placeholder: BLURRED
         formats: [AUTO, WEBP, AVIF]
@@ -33,23 +33,22 @@ const Layout = ({ location, children }) => {
 }
 `)
 
-const logos = [
-  data.mobileLogo.childImageSharp.gatsbyImageData,
+const logos = withArtDirection(getImage(data.mobileLogo), [
   {
-    ...data.desktopLogo.childImageSharp.gatsbyImageData,
-    media: `(min-width: 768px)`
-  }
-]
+    media: "(min-width: 768px)",
+    image: getImage(data.desktopLogo),
+  },
+])
 
   if (location.pathname === rootPath) {
     header = (
-      <div>
+      <div class="px-4 mb-6 md:ml-20">
         <GatsbyImage image={logos} alt="Fallfish Tenkara" />
       </div>
     )
   } else {
     header = (
-      <div>
+      <div class="px-4 mb-6 md:ml-20">
         <Link to={`/`}>
           <GatsbyImage image={logos} alt="Fallfish Tenkara" />
         </Link>
@@ -58,14 +57,13 @@ const logos = [
     )
   }
   return (
-    <div>
-      <header className="">{header}</header>
-      <main>{children}</main>
-      <footer>
-        © {new Date().getFullYear()}, Built with
-        {` `}
-        <a href="https://www.gatsbyjs.com">Gatsby</a>
-      </footer>
+    <div class="flex flex-col">
+        <header class="pr-2">{header}</header>  
+          <div class="hidden md:block w-2/3 mx-auto">
+      </div>
+      <div class="bg-gray-200 mb-4 w-full lg:w-2/3 mx-auto overflow-hidden rounded-lg shadow-xl">
+        <main>{children}</main>
+      </div>
     </div>
   )
 }
