@@ -3,6 +3,7 @@ import { Link, useStaticQuery, graphql } from "gatsby"
 
 import { GatsbyImage, getImage, withArtDirection } from "gatsby-plugin-image";
 
+import Render from "./render.jpg"
 
 const Layout = ({ location, children }) => {
   const rootPath = `${__PATH_PREFIX__}/`
@@ -61,6 +62,10 @@ const logos = withArtDirection(getImage(data.mobileLogo), [
         <header class="pr-2">{header}</header>  
           <div class="hidden md:block w-2/3 mx-auto">
       </div>
+      
+      <hr />
+      <p>How it should look...</p>
+      <img src={Render} alt="live home screen" />
       <div class="bg-gray-200 mb-4 w-full lg:w-2/3 mx-auto overflow-hidden rounded-lg shadow-xl">
         <main>{children}</main>
       </div>
